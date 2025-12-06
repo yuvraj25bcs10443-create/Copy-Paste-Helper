@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Copy-Paste Helper</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .box {
+      width: 300px;
+      margin: auto;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 10px;
+      margin-right: 5px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    #status {
+      height: 20px;
+      margin-top: 10px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>Copy-Paste Helper</h2>
+
+    <textarea id="textArea" placeholder="Type something here..."></textarea>
+
+    <br>
+    <button id="copyBtn">Copy Text</button>
+    <button id="pasteBtn">Paste Text</button>
+
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const textArea = document.getElementById("textArea");
+    const copyBtn = document.getElementById("copyBtn");
+    const pasteBtn = document.getElementById("pasteBtn");
+    const status = document.getElementById("status");
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(textArea.value);
+        showStatus("Copied!");
+      } catch (error) {
+        showStatus("Copy failed.");
+      }
+    });
+
+    pasteBtn.addEventListener("click", async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        textArea.value = text;
+        showStatus("Pasted!");
+      } catch (error) {
+        showStatus("Paste blocked by the browser.");
+      }
+    });
+
+    function showStatus(message) {
+      status.textContent = message;
+      setTimeout(() => {
+        status.textContent = "";
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
